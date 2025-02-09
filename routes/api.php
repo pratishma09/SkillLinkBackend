@@ -8,6 +8,12 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
+use App\Http\Controllers\JobseekerController;
+use App\Http\Controllers\JobSeekerEducationController;
+use App\Http\Controllers\JobSeekerWorkExperienceController;
+use App\Http\Controllers\JobSeekerCertificationController;
+use App\Http\Controllers\JobSeekerProjectController;
+use App\Http\Controllers\CollegeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,5 +98,31 @@ Route::middleware('auth:sanctum')->group(function () {
         $request->user()->sendEmailVerificationNotification();
         return response()->json(['message' => 'Verification link sent']);
     })->middleware(['throttle:6,1'])->name('verification.send');
+
+    Route::get('/jobseeker/profile', [JobseekerController::class, 'show']);
+    Route::post('/jobseeker/profile', [JobseekerController::class, 'update']);
+
+    // Education routes
+    Route::post('/jobseeker/education', [JobSeekerEducationController::class, 'store']);
+    Route::put('/jobseeker/education/{education}', [JobSeekerEducationController::class, 'update']);
+    Route::delete('/jobseeker/education/{education}', [JobSeekerEducationController::class, 'destroy']);
+
+    // Work Experience routes
+    Route::post('/jobseeker/experience', [JobSeekerWorkExperienceController::class, 'store']);
+    Route::put('/jobseeker/experience/{experience}', [JobSeekerWorkExperienceController::class, 'update']);
+    Route::delete('/jobseeker/experience/{experience}', [JobSeekerWorkExperienceController::class, 'destroy']);
+
+    // Certifications
+    Route::post('/jobseeker/certifications', [JobSeekerCertificationController::class, 'store']);
+    Route::put('/jobseeker/certifications/{certification}', [JobSeekerCertificationController::class, 'update']);
+    Route::delete('/jobseeker/certifications/{certification}', [JobSeekerCertificationController::class, 'destroy']);
+
+    // Projects
+    Route::post('/jobseeker/projects', [JobSeekerProjectController::class, 'store']);
+    Route::put('/jobseeker/projects/{project}', [JobSeekerProjectController::class, 'update']);
+    Route::delete('/jobseeker/projects/{project}', [JobSeekerProjectController::class, 'destroy']);
+
+    // College routes
+    Route::get('/colleges', [CollegeController::class, 'index']);
 });
 

@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Company;
 
+use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ProjectRequest;
 
@@ -11,7 +13,7 @@ class ProjectController extends Controller
 {
     public function index(): JsonResponse
     {
-        $projects = Project::with(['company'])
+        $projects = Project::with(['company', 'projectcategory'])
             ->where('status', 'active')
             ->latest()
             ->paginate(10);
@@ -35,13 +37,13 @@ class ProjectController extends Controller
 
         return response()->json([
             'message' => 'Project created successfully',
-            'project' => $project->load('company')
+            'project' => $project->load(['company', 'projectcategory'])
         ], 201);
     }
 
     public function show(Project $project): JsonResponse
     {
-        return response()->json($project->load('company'));
+        return response()->json($project->load(['company', 'projectcategory']));
     }
 
     public function update(ProjectRequest $request, Project $project): JsonResponse
@@ -57,7 +59,7 @@ class ProjectController extends Controller
 
         return response()->json([
             'message' => 'Project updated successfully',
-            'project' => $project->load('company')
+            'project' => $project->load(['company', 'projectcategory'])
         ]);
     }
 
@@ -79,10 +81,12 @@ class ProjectController extends Controller
 
     public function myProjects(): JsonResponse
     {
-        $projects = Project::where('posted_by', auth()->id())
+        $projects = Project::with(['company', 'projectcategory'])
+            ->where('posted_by', auth()->id())
             ->latest()
             ->paginate(10);
 
         return response()->json($projects);
     }
+
 } 

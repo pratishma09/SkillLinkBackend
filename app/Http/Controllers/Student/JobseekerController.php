@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Student;
 
 use App\Models\Jobseeker;
-use App\Models\User;
+use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -129,8 +131,8 @@ class JobseekerController extends Controller
                 'data' => $jobseeker
             ]);
 
-        } catch (\Exception $e) {
-            \Log::error('Profile update error: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Log::error('Profile update error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to update profile: ' . $e->getMessage()

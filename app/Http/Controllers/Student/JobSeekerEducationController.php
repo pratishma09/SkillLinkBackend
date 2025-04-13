@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Student;
 
+use App\Http\Controllers\Controller;
 use App\Models\JobSeekerEducation;
 use App\Models\Jobseeker;
 use Illuminate\Http\Request;

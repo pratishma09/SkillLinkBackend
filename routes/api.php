@@ -1,19 +1,19 @@
 <?php
 
+use App\Http\Controllers\Auth\LogoutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{EmailVerificationNotificationController,LogoutController, ProfilePhotoController};
-use  Laravel\Fortify\Http\Controllers\{AuthenticatedSessionController, RegisteredUserController,PasswordResetLinkController,ProfileInformationController,PasswordController};
+use App\Http\Controllers\{EmailVerificationNotificationController};
+use  Laravel\Fortify\Http\Controllers\{RegisteredUserController,PasswordResetLinkController,PasswordController};
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
-use App\Http\Controllers\JobseekerController;
-use App\Http\Controllers\JobSeekerEducationController;
-use App\Http\Controllers\JobSeekerWorkExperienceController;
-use App\Http\Controllers\JobSeekerCertificationController;
-use App\Http\Controllers\JobSeekerProjectController;
-use App\Http\Controllers\CollegeController;
+use App\Http\Controllers\Student\JobseekerController;
+use App\Http\Controllers\Student\JobSeekerEducationController;
+use App\Http\Controllers\Student\JobSeekerWorkExperienceController;
+use App\Http\Controllers\Student\JobSeekerCertificationController;
+use App\Http\Controllers\Student\JobSeekerProjectController;
+use App\Http\Controllers\Admin\CollegeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,5 +124,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // College routes
     Route::get('/colleges', [CollegeController::class, 'index']);
+
+    // Project Applicant Routes
 });
 

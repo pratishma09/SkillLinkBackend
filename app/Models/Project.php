@@ -16,9 +16,13 @@ class Project extends Model
         'posted_by', // user_id of the company
         'type_of_project',
         'status',
+        'location',
+        'salary',
         'requirements',
         'deadline',
-        'skills_required'
+        'project_category_id',
+        'skills_required',
+
     ];
 
     protected $casts = [
@@ -30,5 +34,9 @@ class Project extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(User::class, 'posted_by')->where('role', 'company');
+    }
+    public function projectcategory(): BelongsTo
+    {
+        return $this->belongsTo(ProjectCategory::class, 'project_category_id');
     }
 } 

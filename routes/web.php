@@ -66,6 +66,14 @@ Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     
+    Route::middleware(['role:college'])->group(function () {
+    Route::get('/profiles', [ProfileController::class, 'index']);
+    Route::get('/profiles/{profile}', [ProfileController::class, 'show']);
+    Route::post('/profiles', [ProfileController::class, 'store']);
+    Route::put('/profiles/{profile}', [ProfileController::class, 'update']);
+    Route::delete('/profiles/{profile}', [ProfileController::class, 'destroy']);
+    Route::get('/users/{user}/profile', [ProfileController::class, 'getProfileByUser']);
+    });
     // Company only routes
     Route::middleware(['role:company'])->group(function () {
         Route::post('/projects', [ProjectController::class, 'store']);
@@ -73,8 +81,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
         Route::get('/my-projects', [ProjectController::class, 'myProjects']);
 
+        Route::get('/profiles', [ProfileController::class, 'index']);
+    Route::get('/profiles/{profile}', [ProfileController::class, 'show']);
+    Route::post('/profiles', [ProfileController::class, 'store']);
+    Route::put('/profiles/{profile}', [ProfileController::class, 'update']);
+    Route::delete('/profiles/{profile}', [ProfileController::class, 'destroy']);
+    Route::get('/users/{user}/profile', [ProfileController::class, 'getProfileByUser']);
+
         Route::get('/projects/{project}/applicants', [ProjectApplicantController::class, 'getProjectApplications']);
         Route::put('/projects/{project}/applicants/{applicant}/status', [ProjectApplicantController::class, 'updateApplicantStatus']);
+
+        Route::get('/projects/{project}/applicants/{applicant}', [ProjectApplicantController::class, 'getApplicantDetails']);
     });
 
     // Admin routes
@@ -84,13 +101,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('/category/{category}', [ProjectCategoryController::class, 'destroy']);
     });
 
-    Route::middleware(['role:company,college'])->group(function () {
-    Route::get('/profiles', [ProfileController::class, 'index']);
-    Route::get('/profiles/{profile}', [ProfileController::class, 'show']);
-    Route::post('/profiles', [ProfileController::class, 'store']);
-    Route::put('/profiles/{profile}', [ProfileController::class, 'update']);
-    Route::delete('/profiles/{profile}', [ProfileController::class, 'destroy']);
-    Route::get('/users/{user}/profile', [ProfileController::class, 'getProfileByUser']);
+    Route::middleware(['role:company'])->group(function () {
+    
     });
 
     Route::middleware(['role:student'])->group(function(){

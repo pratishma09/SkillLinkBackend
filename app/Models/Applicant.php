@@ -14,7 +14,13 @@ class Applicant extends Model
         'is_saved',
         'jobseeker_status',
         'applied_date',
-        'meeting_time'
+        'meeting_time',
+        'meeting_link'
+    ];
+
+    protected $casts = [
+        'applied_date' => 'datetime',
+        'meeting_time' => 'datetime',
     ];
 
     public function project()

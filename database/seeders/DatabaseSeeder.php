@@ -20,7 +20,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            AdminSeeder::class,
+            // AdminSeeder::class,
+            // CollegeSeeder::class,
+            // CompanySeeder::class,
+            // StudentSeeder::class,
+            // ProjectCategorySeeder::class,
+            ProjectSeeder::class
         ]);
     }
 }

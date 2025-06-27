@@ -22,13 +22,17 @@ class Project extends Model
         'deadline',
         'project_category_id',
         'skills_required',
-
+        'payment_verified',
+        'payment_transaction_id',
+        'payment_amount',
     ];
 
     protected $casts = [
         'deadline' => 'datetime',
         'skills_required' => 'array',
-        'requirements' => 'array'
+        'requirements' => 'array',
+        'payment_verified' => 'boolean',
+        'payment_amount' => 'decimal:2'
     ];
 
     public function company(): BelongsTo

@@ -12,8 +12,17 @@ class CountController extends Controller
     //
     public function totalProjects(){
         $counts=['total_projects'=>DB::table('projects')->count(),
+        
     'total_companies'=>DB::table('users')->where('role','company')->count(),
 'total_colleges'=>DB::table('users')->where('role','college')->count()];
+        return response()->json($counts);
+    }
+    
+    public function adminView(){
+        $counts=['total_projects'=>DB::table('projects')->count(),
+        'total_users'=>DB::table('users')->count(),
+    'total_categories'=>DB::table('project_categories')->count(),
+'total_pending_users'=>DB::table('users')->where('status','pending')->count()];
         return response()->json($counts);
     }
 
@@ -24,6 +33,21 @@ class CountController extends Controller
 
     public function totalColleges(){
         $count=DB::table('users')->where('role','college')->count();
+        return response()->json($count);
+    }
+
+    public function totalCategories(){
+        $count=DB::table('project_categories')->count();
+        return response()->json($count);
+    }
+
+    public function totalUsers(){
+        $count=DB::table('users')->count();
+        return response()->json($count);
+    }
+
+    public function pendingUsersCount(){
+        $count=DB::table('users')->where('status','pending')->count();
         return response()->json($count);
     }
 

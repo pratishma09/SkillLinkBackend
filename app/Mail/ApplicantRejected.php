@@ -2,8 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Project;
-use App\Models\Applicant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,20 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ApplicantStatusChanged extends Mailable
+class ApplicantRejected extends Mailable
 {
     use Queueable, SerializesModels;
-    public $project;
-    public $applicant;
-
+    public $project_title;
     /**
      * Create a new message instance.
      */
-    public function __construct(Project $project, Applicant $applicant)
+    public function __construct($project_title)
     {
-        //
-        $this->project = $project;
-        $this->applicant = $applicant;
+        $this->project_title = $project_title;
     }
 
     /**
@@ -33,7 +27,7 @@ class ApplicantStatusChanged extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Your application status has been updated",
+            subject: 'Applicant Rejected',
         );
     }
 
@@ -43,7 +37,8 @@ class ApplicantStatusChanged extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.applicant-status-changed',
+            view: 'emails.applicant-rejected',
+            with: ['project_title' => $this->project_title]
         );
     }
 

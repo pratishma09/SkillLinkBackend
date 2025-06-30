@@ -35,8 +35,8 @@
                         <li>Allow camera and microphone access when prompted</li>
                         <li>Ensure you have a stable internet connection</li>
                         <li>Join a few minutes early to test your setup</li>
-                        @if(str_contains($meeting_link, 'meet.jit.si'))
-                        <li><strong>Note:</strong> This interview uses Jitsi Meet - no account required, works in any browser</li>
+                        @if(str_contains($meeting_link, 'meet.google.com'))
+                        <li><strong>Note:</strong> This interview uses Google Meet - you may need a Google account</li>
                         @endif
                     </ol>
 
@@ -47,6 +47,23 @@
                     </div>
 
                     <p><em>Meeting Link: {{$meeting_link}}</em></p>
+                </div>
+            @elseif(isset($start_time) && $start_time)
+                <div class="meeting-details">
+                    <h4>📅 Interview Details</h4>
+                    <p><strong>Date & Time:</strong> {{$start_time}} to {{$end_time}}</p>
+                    <p><strong>Meeting Type:</strong> Online Video Interview</p>
+
+                    <p><strong>📞 Next Steps:</strong></p>
+                    <p>A calendar event has been created for your interview. The meeting link will be provided separately or you will receive a calendar invitation with the meeting details.</p>
+
+                    <p><strong>Please ensure you:</strong></p>
+                    <ul>
+                        <li>Check your email for calendar invitations</li>
+                        <li>Have a stable internet connection ready</li>
+                        <li>Test your camera and microphone beforehand</li>
+                        <li>Join a few minutes early</li>
+                    </ul>
                 </div>
 
                 <p><strong>Important Notes:</strong></p>

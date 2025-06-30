@@ -84,10 +84,20 @@ class PaymentService  implements PaymentGatewayInterface
             ]
         ];
 
-        $response = Http::withHeaders([
+        $httpClient = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'key ' . env('KHALTI_SECRET_KEY'), // Replace with your authorization token
-        ])->post($process_url, $data);
+        ]);
+
+        // Disable SSL verification in development
+        if (env('APP_DEBUG', false)) {
+            $httpClient = $httpClient->withOptions([
+                'verify' => false,
+                'timeout' => 30,
+            ]);
+        }
+
+        $response = $httpClient->post($process_url, $data);
         if ($response->ok()) {
             $body = json_decode($response->body());
             return redirect()->to($body->payment_url);
@@ -136,11 +146,39 @@ class PaymentService  implements PaymentGatewayInterface
         $payload = [
             'pidx' => $transaction_id
         ];
-        $response = Http::withHeaders([
+        $httpClient = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'key ' . env('KHALTI_SECRET_KEY'),
-        ])->post($process_url, $payload);
-        $this->inquiry_response =  json_decode($response->body(),true);
+        ]);
+
+        // Disable SSL verification in development
+        if (env('APP_DEBUG', false)) {
+            $httpClient = $httpClient->withOptions([
+                'verify' => false,
+                'timeout' => 30,
+            ]);
+        }
+
+        $response = $httpClient->post($process_url, $payload);
+
+        // Log the response for debugging
+        \Log::info('Khalti inquiry response', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+            'url' => $process_url,
+            'payload' => $payload
+        ]);
+
+        if (!$response->successful()) {
+            \Log::error('Khalti inquiry failed', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+                'url' => $process_url
+            ]);
+            throw new \Exception('Khalti inquiry failed: ' . $response->body());
+        }
+
+        $this->inquiry_response = json_decode($response->body(), true);
         return $this->inquiry_response;
     }
 }

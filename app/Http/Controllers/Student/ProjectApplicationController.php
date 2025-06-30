@@ -186,7 +186,7 @@ class ProjectApplicationController extends Controller
 
         $applications = Applicant::with(['project', 'project.company', 'project.projectcategory'])
             ->where('jobseeker_id', $jobseeker->id)
-            ->where('jobseeker_status', 'applied')
+            ->whereNot('jobseeker_status', 'saved')
             ->latest()
             ->paginate(10);
 

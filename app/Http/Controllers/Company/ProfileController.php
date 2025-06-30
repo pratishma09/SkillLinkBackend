@@ -28,7 +28,7 @@ class ProfileController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => 'nullable|string',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'logo' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             'website' => 'nullable|url',
             'phone' => 'nullable|string',
             'address' => 'nullable|string',

@@ -94,6 +94,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     // Company only routes
     Route::middleware(['role:company'])->group(function () {
+        Route::post('/projects/validate', [ProjectController::class, 'validateProject']);
+        Route::post('/projects/store-after-payment', [ProjectController::class, 'storeAfterPayment']);
         Route::post('/projects', [ProjectController::class, 'store']);
         Route::put('/projects/{project}', [ProjectController::class, 'update']);
         Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
@@ -182,4 +184,39 @@ Route::get('/google-calendar/callback', function (Request $request) {
     Storage::put('google-calendar/oauth-token.json', json_encode($accessToken));
 
     return response()->json(['success' => true, 'message' => 'OAuth token generated successfully.']);
+});
+
+// Test Khalti SSL connection
+Route::get('/test-khalti-ssl', function () {
+    try {
+        $httpClient = \Illuminate\Support\Facades\Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'key ' . env('KHALTI_SECRET_KEY'),
+        ]);
+
+        // Disable SSL verification in development
+        if (env('APP_DEBUG', false)) {
+            $httpClient = $httpClient->withOptions([
+                'verify' => false,
+                'timeout' => 30,
+            ]);
+        }
+
+        $response = $httpClient->post('https://a.khalti.com/api/v2/epayment/lookup/', [
+            'pidx' => 'test-pidx'
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'status' => $response->status(),
+            'body' => $response->body(),
+            'ssl_verification' => env('APP_DEBUG') ? 'disabled' : 'enabled'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage(),
+            'ssl_verification' => env('APP_DEBUG') ? 'disabled' : 'enabled'
+        ]);
+    }
 });

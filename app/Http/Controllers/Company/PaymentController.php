@@ -52,9 +52,14 @@ class PaymentController extends Controller
 
             // If payment is successful and we have project data, create the project
             if ($projectData) {
-                Log::info('Received project data for validation', ['project_data' => $projectData]);
+                Log::info('Received project data for creation after payment', ['project_data' => $projectData]);
 
-                // Validate project data
+                // Create project using the new endpoint logic
+                $projectData['payment_verified'] = true;
+                $projectData['payment_transaction_id'] = $pidx;
+                $projectData['payment_amount'] = $this->paymentService->requestedAmount($paymentInquiry) / 100; // Convert from paisa to rupees
+
+                // Use the same validation as the new endpoint
                 $validatedData = $this->validateProjectData($projectData);
 
                 $project = Project::create([
@@ -62,7 +67,7 @@ class PaymentController extends Controller
                     'posted_by' => auth()->id(),
                     'payment_verified' => true,
                     'payment_transaction_id' => $pidx,
-                    'payment_amount' => $this->paymentService->requestedAmount($paymentInquiry) / 100, // Convert from paisa to rupees
+                    'payment_amount' => $this->paymentService->requestedAmount($paymentInquiry) / 100,
                 ]);
 
                 Log::info('Project created after payment verification', [
